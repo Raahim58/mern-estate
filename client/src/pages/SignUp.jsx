@@ -1,62 +1,43 @@
 import { useState } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null); // Initialize error state
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
     });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      setError(null); // Reset error state
-
-      const res = await fetch('http://localhost:3000/client/auth/signup', {
+      const res = await fetch('/server/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-
-      if (!res.ok) {
-        const errorData = await res.text(); // Or res.json() if your server returns JSON errors
-        console.error('Error:', errorData);
-        // alert(`Error: ${res.status} ${res.statusText}`);
-        setLoading(false);
-        setError(errorData); // Set the error state
-        return;
-      }
-
       const data = await res.json();
+      console.log(data);
       if (data.success === false) {
         setLoading(false);
-        setError(data.message); // Set the error state
+        setError(data.message);
         return;
       }
-
-      console.log(data);
       setLoading(false);
       setError(null);
-      navigate('/signin');
+      navigate('/sign-in');
     } catch (error) {
       setLoading(false);
-      setError(error.message); // Set the error state
-      console.error('Fetch error:', error);
-      alert('An error occurred while signing up. Please try again later.');
+      setError(error.message);
     }
   };
-
-  console.log(formData);
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -100,6 +81,7 @@ export default function SignUp() {
           <span className='text-blue-700'>Sign in</span>
         </Link>
       </div>
+      {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
   );
 }
