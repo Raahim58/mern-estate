@@ -17,7 +17,6 @@ export default function Search() {
     const [listings, setListings] = useState([]);
     const [error, setError] = useState(false);
     const [showMore, setShowMore] = useState(false);
-    const [totalResults, setTotalResults] = useState(0); // New state for total results
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
@@ -243,11 +242,11 @@ export default function Search() {
                                 Error loading listing results.
                             </p>
                         )}
-                        {
-                            !loading && listings && listings.map((listing) => 
-                                <Listingitem key={listing._id} listing={listing} />
-                            )
-                        }
+                        {!loading &&
+                            listings &&
+                            listings.map((listing) => (
+                            <Listingitem key={listing._id} listing={listing} />
+                        ))}
                         {showMore && (
                             <button
                                 onClick={onShowMoreClick}
