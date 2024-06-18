@@ -33,19 +33,19 @@ app.use('/server/user', userRouter);
 app.use('/server/auth', authRouter);
 app.use('/server/listing', listingRouter);
 
-app.use(express.static(path.join(__dirname, '/client/dist')));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/client', 'dist', 'index.html'))
+  res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'))
 })
 
 app.get("/", (req, res) => {
   res.send("API Server is Running")
 })
 
-app.get("*", (req, res) => {
-  res.send("API not defined")
-})
+// app.get("*", (req, res) => {
+//   res.send("API not defined")
+// })
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
